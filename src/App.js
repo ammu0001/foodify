@@ -20,19 +20,33 @@ class App extends Component {
 	    const recipeName = e.target.elements.recipeName.value;
 	    e.preventDefault();
 
-      const response = await fetch('http://cors-anywhere.herokuapp.com/https://api.edamam.com/search?q='+ recipeName +'&app_id=c5da39b4&app_key=5350b072c90deef413b5f573ed35ed89&from=0&to=12&calories=591-722&health=alcohol-free');
+      const response = await fetch('http://cors-anywhere.herokuapp.com/https://api.edamam.com/search?q='+ recipeName +'&app_id=c5da39b4&app_key=5350b072c90deef413b5f573ed35ed89&from=0&to=24&calories=591-722&health=alcohol-free');
       const data = await response.json();
       this.setState({ recipes: data.hits });
       console.log(this.state.recipes);
       // console.log(data);
-	}
+  }
+
+  componentDidMount = () => {
+    const json = localStorage.getItem("recipes");
+    const recipes = JSON.parse(json);
+    this.setState({ recipes });
+  }
+  
+  componentDidUpdate = () => {
+
+    const recipes = JSON.stringify(this.state.recipes);
+    localStorage.setItem("recipes",recipes); 
+
+  }
 
 render(){
   return (
 
               <div className ="App">
                 <header className="App-header">
-                  <h1 className="App-title">Foodify</h1>
+                  <h1 className="App-title">Cooking King</h1>
+                  <h6 className="App-subtitle">We Provide Thousands of Recipes</h6>
                 </header>
                 < Form getRecipe={this.getRecipe} />
                  <Recipes recipes={this.state.recipes}/>
