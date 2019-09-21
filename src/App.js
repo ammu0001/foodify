@@ -1,29 +1,45 @@
 import React, { Component } from 'react';
-import logo, { ReactComponent } from './logo.svg';
+// import logo, { ReactComponent } from './logo.svg';
 import './App.css';
 import Form from "./components/Form";
+import Recipes from "./components/Recipes";
+
+const API_ID = "c5da39b4";
+const API_KEY = "5350b072c90deef413b5f573ed35ed89";
+
 
 class App extends Component {
 
-	getRecipe(e) {
+  state = {
+
+     recipes: []
+  }
+
+	getRecipe = async (e) => {
 
 	    const recipeName = e.target.elements.recipeName.value;
 	    e.preventDefault();
-		console.log(recipeName);
+
+      const response = await fetch('http://cors-anywhere.herokuapp.com/https://api.edamam.com/search?q='+ recipeName +'&app_id=c5da39b4&app_key=5350b072c90deef413b5f573ed35ed89&from=0&to=12&calories=591-722&health=alcohol-free');
+      const data = await response.json();
+      this.setState({ recipes: data.hits });
+      console.log(this.state.recipes);
+      // console.log(data);
 	}
 
 render(){
   return (
 
-    <div className ="App">
-      <header className="App-header">
-        <h1 className="App-title">Foodify</h1>
-      </header>
-      < Form getRecipe={this.getRecipe} />
-    </div>
+              <div className ="App">
+                <header className="App-header">
+                  <h1 className="App-title">Foodify</h1>
+                </header>
+                < Form getRecipe={this.getRecipe} />
+                 <Recipes recipes={this.state.recipes}/>
+              </div>
 
-  );
-}
+    );
+  }
 
 }
 
